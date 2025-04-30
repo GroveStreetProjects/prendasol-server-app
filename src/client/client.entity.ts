@@ -5,18 +5,18 @@ export class Cliente {
   @PrimaryGeneratedColumn()
   Id: number;
 
-  @Column({ length: 50 })
+  @Column({ type: 'varchar', length: 50 })
   Nombres: string;
 
-  @Column({ length: 30 })
+  @Column({ type: 'varchar', length: 30 })
   Paterno: string;
 
-  @Column({ length: 30 })
+  @Column({ type: 'varchar', length: 30 })
   Materno: string;
 
-  @Column({ length: 12 })
+  @Column({ type: 'varchar', length: 12, unique: true })
   CI: string;
 
-  @Column({ length: 100 })
+  @Column({ type: 'varchar', length: 100 })
   Contrasena: string;
 }
