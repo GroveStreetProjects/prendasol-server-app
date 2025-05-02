@@ -1,22 +1,55 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Articulo, Fotocopia } from 'src/article/article.entity';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, OneToMany } from 'typeorm';
 
 @Entity('cliente')
 export class Cliente {
   @PrimaryGeneratedColumn()
   Id: number;
 
-  @Column({ type: 'varchar', length: 50 })
+  @Column({ length: 50 })
   Nombres: string;
 
-  @Column({ type: 'varchar', length: 30 })
+  @Column({ length: 30 })
   Paterno: string;
 
-  @Column({ type: 'varchar', length: 30 })
+  @Column({ length: 30 })
   Materno: string;
 
-  @Column({ type: 'varchar', length: 12, unique: true })
+  @Column({ length: 12 })
   CI: string;
 
-  @Column({ type: 'varchar', length: 100 })
+  @Column({ length: 100 })
   Contrasena: string;
+
+  @OneToMany(() => CelularesCliente, (celularCliente) => celularCliente.cliente)
+  celulares: CelularesCliente[];
+
+  @OneToMany(() => CorreosCliente, (correoCliente) => correoCliente.cliente)
+  correos: CorreosCliente[];
+
+  @OneToMany(() => Articulo, (articulo) => articulo.cliente)
+  articulos: Articulo[];
+
+  @OneToMany(() => Fotocopia, (fotocopia) => fotocopia.cliente)
+  fotocopias: Fotocopia[];
+}
+
+@Entity()
+export class CelularesCliente {
+  @ManyToOne(() => Cliente, (cliente) => cliente.celulares)
+  @JoinColumn({ name: 'Id_Cliente' })
+  cliente: Cliente;
+
+  @Column({ length: 10 })
+  Celular: string;
+}
+
+@Entity()
+export class CorreosCliente {
+  @ManyToOne(() => Cliente, (cliente) => cliente.correos)
+  @JoinColumn({ name: 'Id_Cliente' })
+  cliente: Cliente;
+
+  @Column({ length: 50 })
+  Correo: string;
 }

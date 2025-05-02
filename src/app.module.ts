@@ -4,6 +4,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { ClientModule } from './client/client.module';
 import { ArticleModule } from './article/article.module';
+import { PawnsModule } from './pawns/pawns.module';
 
 @Module({
   imports: [
@@ -20,6 +21,8 @@ import { ArticleModule } from './article/article.module';
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
       synchronize: false,
     }),
+
+    PawnsModule,
   ],
   controllers: [AppController],
 })
