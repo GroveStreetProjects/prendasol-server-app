@@ -2,6 +2,22 @@ import { Cliente } from 'src/client/client.entity';
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, OneToMany } from 'typeorm';
 
 @Entity()
+export class Fotocopia {
+  @PrimaryGeneratedColumn()
+  Id: number;
+
+  @ManyToOne(() => Cliente, (cliente) => cliente.fotocopias)
+  @JoinColumn({ name: 'Id_Cliente' })
+  cliente: Cliente;
+
+  @Column({ length: 30 })
+  Imagen: string;
+
+  @OneToMany(() => Articulo, (articulo) => articulo.fotocopia)
+  articulos: Articulo[];
+}
+
+@Entity()
 export class Articulo {
   @PrimaryGeneratedColumn()
   Id: number;
@@ -40,20 +56,4 @@ export class Articulo {
 
   @Column({ type: 'date', nullable: true })
   Fecha_Venta: Date;
-}
-
-@Entity()
-export class Fotocopia {
-  @PrimaryGeneratedColumn()
-  Id: number;
-
-  @ManyToOne(() => Cliente, (cliente) => cliente.fotocopias)
-  @JoinColumn({ name: 'Id_Cliente' })
-  cliente: Cliente;
-
-  @Column({ length: 30 })
-  Imagen: string;
-
-  @OneToMany(() => Articulo, (articulo) => articulo.fotocopia)
-  articulos: Articulo[];
 }

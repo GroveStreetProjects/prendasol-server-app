@@ -1,40 +1,35 @@
-import { BadRequestException, Body, Controller, Post, UploadedFiles, UseInterceptors, UsePipes, ValidationPipe } from '@nestjs/common';
-import { PawnsService } from './pawns.service';
-import { FileFieldsInterceptor } from '@nestjs/platform-express';
+import { Controller, Post, Body, UseInterceptors, UploadedFiles } from '@nestjs/common';
+import { AnyFilesInterceptor } from '@nestjs/platform-express';
+import { diskStorage } from 'multer';
+import { extname } from 'path';
 
-@Controller('pawns')
+import { PawnsService } from './pawns.service';
+
+@Controller('registrar-empenio')
 export class PawnsController {
   constructor(private readonly pawnsService: PawnsService) { }
 
-  @Post()
-  @UsePipes(new ValidationPipe({ transform: true, whitelist: true }))
+  @Post('')
   @UseInterceptors(
-    FileFieldsInterceptor([
-      { name: 'pdf', maxCount: 1 },
-      { name: 'imagen', maxCount: 1 },
-    ]),
+    AnyFilesInterceptor({
+      storage: diskStorage({
+        destination: './uploads',
+        filename: (req, file, callback) => {
+          const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
+          const ext = extname(file.originalname);
+          const filename = `${uniqueSuffix}${ext}`;
+          callback(null, filename);
+        },
+      }),
+    }),
   )
-  async createPawn(
-    @Body() newPawn: any,
-    @UploadedFiles() files: { pdf?: Express.Multer.File[], imagen?: Express.Multer.File[] },
+  async registrarEmpenio(
+    @Body() data: any,
+    @UploadedFiles() files: Array<Express.Multer.File>,
   ) {
 
-    if (!files || !files.imagen || !files.imagen[0]) {
-      throw new BadRequestException('El archivo de imagen es requerido.');
-    }
-    if (!files || !files.pdf || !files.pdf[0]) {
-      throw new BadRequestException('El archivo PDF es requerido.');
-    }
+    const parsedData = typeof data === 'string' ? JSON.parse(data) : data;
 
-
-    const imageFile = files.imagen[0];
-    const pdfFile = files.pdf ? files.pdf[0] : null;
-
-    // console.log('DTO:', newPawn);
-    // console.log('Image:', imageFile);
-    // console.log('PDF:', pdfFile);
-
-
-    return this.pawnsService.createPawnProcess(newPawn, imageFile, pdfFile);
+    return this.pawnsService.processPawnTransaction(parsedData, files);
   }
 }

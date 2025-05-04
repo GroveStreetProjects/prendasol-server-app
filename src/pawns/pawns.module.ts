@@ -1,41 +1,26 @@
 import { Module } from '@nestjs/common';
-import { MulterModule } from '@nestjs/platform-express';
-import { diskStorage } from 'multer';
-import * as path from 'path';
+import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { PawnsController } from './pawns.controller';
 import { PawnsService } from './pawns.service';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { CelularesCliente, Cliente, CorreosCliente } from 'src/client/client.entity';
-import { Articulo, Fotocopia } from 'src/article/article.entity';
+
+import { Cliente } from './entities/cliente.entity';
+import { CelularCliente } from './entities/celular-cliente.entity';
+import { CorreoCliente } from './entities/correo-cliente.entity';
+import { Articulos } from './entities/articulo.entity';
+import { Fotocopia } from './entities/fotocopia.entity';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([
       Cliente,
-      CelularesCliente,
-      CorreosCliente,
-      Articulo,
+      CelularCliente,
+      CorreoCliente,
+      Articulos,
       Fotocopia,
     ]),
-    MulterModule.register({
-      storage: diskStorage({
-        destination: './uploads/pawns',
-        filename: (req, file, cb) => {
-          const filename = `${Date.now()}-${file.originalname.replace(/\s/g, '_')}`;
-          cb(null, filename);
-        },
-      }),
-      fileFilter: (req, file, cb) => {
-        if (file.mimetype.match(/\/(jpg|jpeg|png|pdf)$/)) {
-          cb(null, true);
-        } else {
-          cb(new Error('Tipo de archivo no soportado'), false);
-        }
-      },
-    }),
   ],
   controllers: [PawnsController],
-  providers: [PawnsService]
+  providers: [PawnsService],
 })
 export class PawnsModule { }

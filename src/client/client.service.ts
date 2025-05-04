@@ -23,12 +23,13 @@ export class ClientService {
     return this.clienteRepository.find();
   }
 
-  getClient(id: number) {
-    return this.clienteRepository.findOne({
+  async getClient(ci: string) {
+    const client = await this.clienteRepository.findOne({
       where: {
-        Id: id
+        CI: ci
       }
     });
+    return { ...client, Contrasena: undefined };
   }
 
   deleteClient(id: number) {

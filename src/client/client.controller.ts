@@ -20,18 +20,18 @@ export class ClientController {
     return this.clientService.getAllClients();
   }
 
-  @Get(':id')
-  getClient(@Param('Id', ParseIntPipe) id: number) {
-    return this.clientService.getClient(id);
+  @Get(':ci')
+  getClient(@Param('ci') ci: string) {
+    return this.clientService.getClient(ci);
   }
 
   @Delete(':id')
-  deleteClient(@Param('Id', ParseIntPipe) id: number) {
+  deleteClient(@Param('id', ParseIntPipe) id: number) {
     return this.clientService.deleteClient(id);
   }
 
   @Patch(':id')
-  updateClient(@Param('Id', ParseIntPipe) id: number, @Body()
+  updateClient(@Param('id', ParseIntPipe) id: number, @Body()
   user: UpdateClientDto) {
     return this.clientService.updateUser(id, user);
   }

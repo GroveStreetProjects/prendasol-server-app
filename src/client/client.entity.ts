@@ -1,5 +1,5 @@
 import { Articulo, Fotocopia } from 'src/article/article.entity';
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, OneToMany } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, OneToMany, PrimaryColumn } from 'typeorm';
 
 @Entity('cliente')
 export class Cliente {
@@ -21,11 +21,11 @@ export class Cliente {
   @Column({ length: 100 })
   Contrasena: string;
 
-  @OneToMany(() => CelularesCliente, (celularCliente) => celularCliente.cliente)
-  celulares: CelularesCliente[];
+  @OneToMany(() => Celulares_Cliente, (celularCliente) => celularCliente.cliente)
+  celulares: Celulares_Cliente[];
 
-  @OneToMany(() => CorreosCliente, (correoCliente) => correoCliente.cliente)
-  correos: CorreosCliente[];
+  @OneToMany(() => Correos_Cliente, (correoCliente) => correoCliente.cliente)
+  correos: Correos_Cliente[];
 
   @OneToMany(() => Articulo, (articulo) => articulo.cliente)
   articulos: Articulo[];
@@ -35,20 +35,22 @@ export class Cliente {
 }
 
 @Entity()
-export class CelularesCliente {
+export class Celulares_Cliente {
+  @PrimaryColumn()
   @ManyToOne(() => Cliente, (cliente) => cliente.celulares)
   @JoinColumn({ name: 'Id_Cliente' })
-  cliente: Cliente;
+  cliente: number;
 
   @Column({ length: 10 })
   Celular: string;
 }
 
 @Entity()
-export class CorreosCliente {
+export class Correos_Cliente {
+  @PrimaryColumn()
   @ManyToOne(() => Cliente, (cliente) => cliente.correos)
   @JoinColumn({ name: 'Id_Cliente' })
-  cliente: Cliente;
+  cliente: number;
 
   @Column({ length: 50 })
   Correo: string;
