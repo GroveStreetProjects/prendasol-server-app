@@ -101,7 +101,10 @@ export class PawnsService {
 
   async processPawnTransaction(data: any, files: Array<Express.Multer.File>) {
 
-    let cliente: any;
+    let cliente = {
+      Id: 0,
+      CI: ''
+    };
 
     if (!data.cliente.Id) {
       const clienteData = {
