@@ -6,13 +6,13 @@ export class Fotocopia {
   @PrimaryGeneratedColumn()
   Id: number;
 
-  @Column({ name: 'Id_Cliente' })
-  Id_Cliente: number;
+  @Column({ name: 'imagen_url', length: 255 })
+  ImagenUrl: string;
 
-  @Column({ length: 30 })
-  Imagen: string;
+  @Column({ length: 100, nullable: true })
+  Descripcion?: string;
 
-  @ManyToOne(() => Cliente, cliente => cliente.fotocopias)
-  @JoinColumn({ name: 'Id_Cliente' })
-  cliente: Cliente;
+  @ManyToOne(() => Cliente, cliente => cliente.Fotocopias)
+  @JoinColumn({ name: 'cliente_id' })
+  Cliente: Cliente;
 }

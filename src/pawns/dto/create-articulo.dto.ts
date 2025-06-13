@@ -1,13 +1,24 @@
+import { IsString, IsNotEmpty, IsNumber, Min, IsInt, Length } from 'class-validator';
+
 export class CreateArticuloDto {
-  Id_Cliente: number;
-  Id_Empleado?: number;
-  Id_Categoria?: number;
+  @IsString()
+  @IsNotEmpty()
+  @Length(3, 100)
   Nombre: string;
-  Imagen?: string;
-  Id_Fotocopia?: number;
+
+  @IsNumber()
+  @Min(0.01)
   Precio_Empeno: number;
-  Utilidad: number;
-  Fecha_Ingreso: Date;
-  Fecha_Limite: Date;
-  Estado_Articulo: string;
+
+  @IsInt()
+  @IsNotEmpty()
+  CategoriaId: number;
+
+  @IsInt()
+  @IsNotEmpty()
+  tipo: number;
+
+  @IsString()
+  @IsNotEmpty()
+  Descripcion: string;
 }

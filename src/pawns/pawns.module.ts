@@ -5,19 +5,27 @@ import { PawnsController } from './pawns.controller';
 import { PawnsService } from './pawns.service';
 
 import { Cliente } from './entities/cliente.entity';
-import { CelularCliente } from './entities/celular-cliente.entity';
-import { CorreoCliente } from './entities/correo-cliente.entity';
+import { Telefonos } from './entities/telefono.entity';
+import { Correos } from './entities/correo.entity';
 import { Articulos } from './entities/articulo.entity';
 import { Fotocopia } from './entities/fotocopia.entity';
+import { Joyas } from './entities/joyas.entity';
+import { Piedras } from './entities/piedras.entity';
+import { Electrodomesticos } from './entities/electrodomesticos.entity';
+import { Vehiculos } from './entities/vehiculos.entity';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([
       Cliente,
-      CelularCliente,
-      CorreoCliente,
+      Telefonos,
+      Correos,
       Articulos,
       Fotocopia,
+      Joyas,
+      Piedras,
+      Electrodomesticos,
+      Vehiculos
     ]),
   ],
   controllers: [PawnsController],

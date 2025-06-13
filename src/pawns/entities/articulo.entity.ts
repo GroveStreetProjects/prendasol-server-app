@@ -1,51 +1,74 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToOne, JoinColumn } from 'typeorm';
 import { Cliente } from './cliente.entity';
+import { Empleado } from './empleado.entity';
+import { Categoria } from './categoria.entity';
+import { Fotocopia } from './fotocopia.entity';
+import { Joyas } from './joyas.entity';
+import { Vehiculos } from './vehiculos.entity';
+import { Piedras } from './piedras.entity';
+import { Electrodomesticos } from './electrodomesticos.entity';
 
 @Entity('articulos')
 export class Articulos {
   @PrimaryGeneratedColumn()
   Id: number;
 
-  @Column({ name: 'Id_Cliente' })
-  Id_Cliente: number;
-
-  @Column({ name: 'Id_Empleado', nullable: true })
-  Id_Empleado?: number;
-
-  @Column({ name: 'Id_Categoria', nullable: true })
-  Id_Categoria?: number;
-
-  @Column({ length: 50 })
+  @Column({ name: 'nombre', length: 100 })
   Nombre: string;
 
-  @Column({ length: 30, nullable: true })
-  Imagen?: string;
+  @Column({ name: 'imagen_url', length: 255, nullable: true })
+  ImagenUrl?: string;
 
-  @Column({ name: 'Id_Fotocopia', nullable: true })
-  Id_Fotocopia?: number;
-
-  @Column({ type: 'double', precision: 9, scale: 2, name: 'Precio_Empeno' })
+  @Column({ name: 'precio_empeno', type: 'decimal', precision: 10, scale: 2 })
   Precio_Empeno: number;
 
-  @Column({ type: 'double', precision: 8, scale: 2 })
+  @Column({ name: 'utilidad', type: 'decimal', precision: 10, scale: 2 })
   Utilidad: number;
 
-  @Column({ type: 'date', name: 'Fecha_Ingreso' })
-  Fecha_Ingreso: Date;
+  @Column({ name: 'fecha_ingreso', type: 'date' })
+  FechaIngreso: Date;
 
-  @Column({ type: 'date', name: 'Fecha_Limite' })
-  Fecha_Limite: Date;
+  @Column({ name: 'fecha_limite', type: 'date' })
+  FechaLimite: Date;
 
-  @Column({ length: 10, name: 'Estado_Articulo' })
-  Estado_Articulo: string;
+  @Column({ name: 'fecha_recogida', type: 'date', nullable: true })
+  FechaRecogida?: Date;
 
-  @Column({ type: 'date', nullable: true, name: 'Fecha_Recogida' })
-  Fecha_Recogida?: Date;
+  @Column({ name: 'fecha_venta', type: 'date', nullable: true })
+  FechaVenta?: Date;
 
-  @Column({ type: 'date', nullable: true, name: 'Fecha_Venta' })
-  Fecha_Venta?: Date;
+  @Column({
+    name: 'estado_articulo',
+    type: 'enum',
+    enum: ['empeñado', 'recogido', 'vendido', 'vencido'],
+  })
+  EstadoArticulo: string;
 
-  @ManyToOne(() => Cliente, cliente => cliente.articulos)
-  @JoinColumn({ name: 'Id_Cliente' })
-  cliente: Cliente;
+  @ManyToOne(() => Cliente, cliente => cliente.Articulos)
+  @JoinColumn({ name: 'cliente_id' })
+  Cliente: Cliente;
+
+  @ManyToOne(() => Empleado, empleado => empleado.Articulos)
+  @JoinColumn({ name: 'empleado_id' })
+  Empleado: Empleado;
+
+  @ManyToOne(() => Categoria, categoria => categoria.Articulos)
+  @JoinColumn({ name: 'categoria_id' })
+  Categoria: Categoria;
+
+  @OneToOne(() => Fotocopia)
+  @JoinColumn({ name: 'fotocopia_id' })
+  Fotocopia?: Fotocopia | null;
+
+  @OneToOne(() => Joyas, joya => joya.Articulo)
+  Joya: Joyas;
+
+  @OneToOne(() => Joyas, joya => joya.Articulo)
+  Piedra: Piedras;
+
+  @OneToOne(() => Joyas, joya => joya.Articulo)
+  Electrodomestico: Electrodomesticos;
+
+  @OneToOne(() => Vehiculos, vehiculo => vehiculo.Articulo)
+  Vehiculo: Vehiculos;
 }

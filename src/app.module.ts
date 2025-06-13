@@ -17,7 +17,7 @@ import { PawnsModule } from './pawns/pawns.module';
       port: 3306,
       username: 'root',
       password: '',
-      database: 'prendasol_test',
+      database: 'prendasol_bien',
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
       synchronize: false,
     }),

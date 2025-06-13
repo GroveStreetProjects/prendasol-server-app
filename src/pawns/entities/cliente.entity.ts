@@ -1,10 +1,10 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
-import { CelularCliente } from './celular-cliente.entity';
-import { CorreoCliente } from './correo-cliente.entity';
 import { Articulos } from './articulo.entity';
 import { Fotocopia } from './fotocopia.entity';
+import { Correos } from './correo.entity';
+import { Telefonos } from './telefono.entity';
 
-@Entity()
+@Entity('cliente')
 export class Cliente {
   @PrimaryGeneratedColumn()
   Id: number;
@@ -16,23 +16,23 @@ export class Cliente {
   Paterno: string;
 
   @Column({ length: 30, nullable: true })
-  Materno: string;
+  Materno?: string;
 
-  @Column({ length: 12 })
+  @Column({ length: 15, unique: true })
   CI: string;
 
-  @Column({ length: 100 })
+  @Column({ length: 255 })
   Contrasena: string;
 
-  @OneToMany(() => CelularCliente, celular => celular.cliente)
-  celulares: CelularCliente[];
+  @OneToMany(() => Articulos, articulo => articulo.Cliente)
+  Articulos: Articulos[];
 
-  @OneToMany(() => CorreoCliente, correo => correo.cliente)
-  correos: CorreoCliente[];
+  @OneToMany(() => Fotocopia, fotocopia => fotocopia.Cliente)
+  Fotocopias: Fotocopia[];
 
-  @OneToMany(() => Articulos, articulo => articulo.cliente)
-  articulos: Articulos[];
+  @OneToMany(() => Correos, correo => correo.Cliente)
+  Correos: Correos[];
 
-  @OneToMany(() => Fotocopia, fotocopia => fotocopia.cliente)
-  fotocopias: Fotocopia[];
+  @OneToMany(() => Telefonos, telefono => telefono.Cliente)
+  Telefonos: Telefonos[];
 }

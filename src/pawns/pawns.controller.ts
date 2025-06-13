@@ -1,15 +1,26 @@
-import { Controller, Post, Body, UseInterceptors, UploadedFiles } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  UseInterceptors,
+  UploadedFiles,
+  Patch,
+  Get,
+  Param,
+  ParseIntPipe,
+} from '@nestjs/common';
 import { AnyFilesInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
-import { extname } from 'path';
 
 import { PawnsService } from './pawns.service';
+import { CreatePawnTransactionDto } from './dto/create-pawn-transaction.dto';
+import { extname } from 'path';
 
-@Controller('registrar-empenio')
+@Controller()
 export class PawnsController {
   constructor(private readonly pawnsService: PawnsService) { }
 
-  @Post('')
+  @Post('registrar-empenio')
   @UseInterceptors(
     AnyFilesInterceptor({
       storage: diskStorage({
@@ -23,13 +34,33 @@ export class PawnsController {
       }),
     }),
   )
-  async registrarEmpenio(
-    @Body() data: any,
+  async createPawnTransaction(
+
+    @Body() transactionData: CreatePawnTransactionDto,
     @UploadedFiles() files: Array<Express.Multer.File>,
   ) {
+    console.log('Nuevo emepeño')
+    const articuloDetalle = transactionData.detalles
 
-    const parsedData = typeof data === 'string' ? JSON.parse(data) : data;
+    const serviceData = {
+      empleadoId: transactionData.empleadoId,
+      cliente: transactionData.cliente,
+      articulo: transactionData.articulo,
+      articuloDetalle: articuloDetalle,
+    };
 
-    return this.pawnsService.processPawnTransaction(parsedData, files);
+    return this.pawnsService.processPawnTransaction(serviceData, files);
+  }
+
+  @Patch(':id/recoger')
+  recogerArticulo(
+    @Param('id', ParseIntPipe) id: number
+  ) {
+    return this.pawnsService.recogerArticulo(id);
+  }
+
+  @Get('cliente/:ci')
+  findEmpeñosByClienteCI(@Param('ci') ci: string) {
+    return this.pawnsService.findEmpeniosByClienteCI(ci);
   }
 }
